@@ -61,7 +61,7 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
   }
 });
 
-app.get("/music", async (req, res) => {
+app.post("/music", async (req, res) => {
   try {
     const response = await github.repos.getContent({
       owner: "babyo7",
@@ -76,8 +76,8 @@ app.get("/music", async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    console.log(error);
-    res.send(`<script>alert(${error.message});window.location='/';</script>`);
+    console.log(error.message);
+    res.send(`<script>alert('${error.message}');window.location='/';</script>`);
   }
 });
 
@@ -125,12 +125,12 @@ async function fetch(title, artist, cover, music, res) {
       .catch((error) => {
         console.error("Error updating file:", error.message);
         res.send(
-          `<script>alert(${error.message});window.location='/';</script>`
+          `<script>alert('${error.message}');window.location='/';</script>`
         );
       });
   } catch (error) {
     console.log(error.message);
-    res.send(`<script>alert(${error.message});window.location='/';</script>`);
+    res.send(`<script>alert('${error.message}');window.location='/';</script>`);
   }
 }
 
@@ -163,7 +163,7 @@ async function download(title, artist, url, cover, res) {
     });
   } catch (error) {
     console.log(error.message);
-    res.send(`<script>alert(${error.message});window.location='/';</script>`);
+    res.send(`<script>alert('${error.message}');window.location='/';</script>`);
   }
 }
 
