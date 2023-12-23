@@ -61,7 +61,7 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
   }
 });
 
-app.post("/music", async (req, res) => {
+app.get("/music", async (req, res) => {
   try {
     const response = await github.repos.getContent({
       owner: "babyo7",
