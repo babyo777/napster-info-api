@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 app.post("/upload", upload.single("cover"), async (req, res) => {
   if (req.body.title.length > 23 || req.body.artist.length > 30 || !req.file) {
     res.send(
-      "<script>alert('Cover not Provided or Title , Artist name is Too Long');window.location='/';</script>"
+      "<script>alert('Cover not Provided or Title , Artist name is Too Long 😡');window.location='/';</script>"
     );
   } else {
     const content = req.file.buffer.toString("base64");
