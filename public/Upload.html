@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Music</title>
+    <link rel="stylesheet" href="Upload.css" />
+    <link rel="shortcut icon" href="/Assets/Favicon.jpeg" type="image/x-icon" />
+  </head>
+  <body>
+    <form
+      action="/upload"
+      method="post"
+      id="form"
+      enctype="multipart/form-data"
+    >
+      <img
+        src="https://your-napster.vercel.app/Cover/dp.webp"
+        alt="cover"
+        id="cover-image"
+      />
+      <label for="song-name">Song Name</label>
+      <input
+        type="text"
+        placeholder="Title"
+        name="title"
+        maxlength="23"
+        required
+        pattern="^[A-Za-z0-9\s\-]*$"
+      />
+      <label for="song-artist">Artist Name</label>
+      <input
+        type="text"
+        placeholder="Artist"
+        name="artist"
+        maxlength="30"
+        required
+        pattern="^[A-Za-z0-9\s\-_]*$"
+      />
+      <label for="musci">Youtube Music URL</label>
+      <input
+        type="url"
+        placeholder="Ex - https://youtu.be/bL6dJjxm0x0"
+        name="url"
+        required
+      />
+      <label for="cover"
+        >Upload Cover Photo
+        <input type="file" name="cover" id="cover" accept="image/*" required />
+      </label>
+      <button type="submit">
+        <div class="loader"></div>
+        <label for="submit" class="button">Upload</label>
+      </button>
+    </form>
+    <script src="Upload.js"></script>
+  </body>
+</html>
