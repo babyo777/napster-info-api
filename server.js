@@ -6,6 +6,7 @@ const ytdl = require("ytdl-core");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const dotenv = require('dotenv').config()
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +16,7 @@ const upload = multer({ storage: storage });
 
 app.use(express.static("public"));
 const github = new Octokit({
-  auth: "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",
+  auth: process.env.GITHUB,
 });
 
 app.get("/", (req, res) => {
