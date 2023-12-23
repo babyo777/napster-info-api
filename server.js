@@ -51,12 +51,12 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
       } catch (error) {
         console.error(error.message);
         res.send(
-          "<script>alert('Cover Already Exist');window.location='/';</script>"
+          "<script>alert('Cover Already Exist 💀');window.location='/';</script>"
         );
       }
     } catch (error) {
       console.log(error.message);
-      res.send("<script>alert('Invalid Link');window.location='/';</script>");
+      res.send("<script>alert('Invalid Link 💀');window.location='/';</script>");
     }
   }
 });
@@ -77,7 +77,7 @@ app.get("/music", async (req, res) => {
     res.json(data);
   } catch (error) {
     console.log(error.message);
-    res.send(`<script>alert('${error.message}');window.location='/';</script>`);
+    res.send(`<script>alert('${error.message}❗');window.location='/';</script>`);
   }
 });
 
@@ -120,17 +120,19 @@ async function fetch(title, artist, cover, music, res) {
       })
       .then((response) => {
         console.log("File updated successfully:", response.data.commit.message);
-        res.redirect("/");
+        res.send(
+          `<script>alert('Music uploaded successfully 🚀');window.location='/';</script>`
+        );
       })
       .catch((error) => {
         console.error("Error updating file:", error.message);
         res.send(
-          `<script>alert('${error.message}');window.location='/';</script>`
+          `<script>alert('${error.message}❗');window.location='/';</script>`
         );
       });
   } catch (error) {
     console.log(error.message);
-    res.send(`<script>alert('${error.message}');window.location='/';</script>`);
+    res.send(`<script>alert('${error.message}❗');window.location='/';</script>`);
   }
 }
 
@@ -157,13 +159,13 @@ async function download(title, artist, url, cover, res) {
         fs.unlinkSync(`${info}.mp3`);
         console.error(error.message);
         res.send(
-          "<script>alert('Music Already Exist');window.location='/';</script>"
+          "<script>alert('Music Already Exist 💀');window.location='/';</script>"
         );
       }
     });
   } catch (error) {
     console.log(error.message);
-    res.send(`<script>alert('${error.message}');window.location='/';</script>`);
+    res.send(`<script>alert('${error.message} ❗');window.location='/';</script>`);
   }
 }
 
