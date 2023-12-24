@@ -68,25 +68,6 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
   }
 });
 
-app.get("/music", async (req, res) => {
-  try {
-    const response = await github.repos.getContent({
-      owner: "babyo7",
-      repo: "NGL--Database",
-      path: `music.json`,
-    });
-
-    let content = Buffer.from(response.data.content, "base64").toString(
-      "utf-8"
-    );
-    let data = JSON.parse(content);
-
-    res.json(data);
-  } catch (error) {
-    console.log(error.message);
-    res.send(`<script>alert('${error.message}❗');window.location='/';</script>`);
-  }
-});
 
 async function fetch(title, artist, cover, music, res) {
   const NewMusic = {
@@ -96,10 +77,10 @@ async function fetch(title, artist, cover, music, res) {
     cover: `Cover/${cover}`,
   };
   try {
-    github.repos
+    github2.repos
       .getContent({
-        owner: "babyo7",
-        repo: "NGL--Database",
+        owner: "babyo77",
+        repo: "Music-Player",
         path: "music.json",
       })
       .then((response) => {
@@ -116,9 +97,9 @@ async function fetch(title, artist, cover, music, res) {
           JSON.stringify(existingData, null, 2)
         ).toString("base64");
 
-        return github.repos.createOrUpdateFileContents({
-          owner: "babyo7",
-          repo: "NGL--Database",
+        return github2.repos.createOrUpdateFileContents({
+          owner: "babyo77",
+          repo: "Music-Player",
           path: "music.json",
           message: "Add new song to music.json",
           content: updatedContent,
