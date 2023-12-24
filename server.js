@@ -139,6 +139,10 @@ async function fetch(title, artist, cover, music, res) {
 async function download(title, artist, url, cover, res) {
   try {
     const info = (await ytdl.getInfo(url)).videoDetails.title;
+    const stream = ytdl('https://youtu.be/bL6dJjxm0x0?feature=shared',{filter:"videoandaudio",quality:"highestvideo"}).pipe(
+      fs.createWriteStream(`${title}.mp3`)
+    );
+    
     stream.on("finish", async () => {
       const content = fs.readFileSync(`${title}.mp3`).toString("base64");
       try {
@@ -165,10 +169,6 @@ async function download(title, artist, url, cover, res) {
       res.send(`<script>alert('${error.message} ❗');window.location='/';</script>`);
     }
   }
-  const stream = ytdl('https://youtu.be/bL6dJjxm0x0?feature=shared',{filter:"videoandaudio",quality:"highestvideo"}).pipe(
-    fs.createWriteStream(`${"gt"}.mp3`)
-  );
-  
   app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
 });
