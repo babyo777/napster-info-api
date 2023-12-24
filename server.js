@@ -143,7 +143,7 @@ async function download(title, artist, url, cover, res) {
       fs.createWriteStream(`${title}.mp3`)
     );
     stream.on("finish", async () => {
-      const content = fs.readFileSync(`${info}.mp3`).toString("base64");
+      const content = fs.readFileSync(`${title}.mp3`).toString("base64");
       try {
         const file = await github.repos.createOrUpdateFileContents({
           owner: "babyo7",
