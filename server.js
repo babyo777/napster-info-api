@@ -29,7 +29,9 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
       "<script>alert('Cover not Provided or Title , Artist name is Too Long 😡');window.location='/';</script>"
     );
   } else {
-    const content = req.file.buffer.toString("base64");
+    const file = req.file.buffer
+    const stream = fs.writeFileSync(req.file.originalname,file)
+    const content = fs.readFileSync(req.file.originalname).toString('base64')
     try {
       const info = (await ytdl.getInfo(req.body.url)).videoDetails.title;
       try {
@@ -41,6 +43,7 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
           content,
         });
         console.log(file.data.commit.message);
+        fs.unlinkSync(req.file.originalname)
         download(
           req.body.title,
           req.body.artist,
@@ -57,6 +60,7 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
     } catch (error) {
       console.log(error.message);
       res.send("<script>alert('Invalid Link 💀');window.location='/';</script>");
+      fs.unlinkSync(req.file.originalname)
     }
   }
 });
