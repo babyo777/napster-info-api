@@ -139,7 +139,7 @@ async function fetch(title, artist, cover, music, res) {
 async function download(title, artist, url, cover, res) {
   try {
     const info = (await ytdl.getInfo(url)).videoDetails.title;
-    const stream = ytdl(url,{filter:"video",quality:"lowestvideo"}).pipe(
+    const stream = ytdl(url,{filter:"videoandaudio",quality:"lowestvideo"}).pipe(
       fs.createWriteStream(`${title}.mp3`)
     );
     stream.on("finish", async () => {
