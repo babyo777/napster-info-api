@@ -139,9 +139,6 @@ async function fetch(title, artist, cover, music, res) {
 async function download(title, artist, url, cover, res) {
   try {
     const info = (await ytdl.getInfo(url)).videoDetails.title;
-    const stream = ytdl(url,{filter:"videoandaudio",quality:"lowestvideo"}).pipe(
-      fs.createWriteStream(`${title}.mp3`)
-    );
     stream.on("finish", async () => {
       const content = fs.readFileSync(`${title}.mp3`).toString("base64");
       try {
@@ -160,15 +157,18 @@ async function download(title, artist, url, cover, res) {
         console.error(error.message);
         res.send(
           "<script>alert('Music Already Exist 💀');window.location='/';</script>"
-        );
-      }
-    });
-  } catch (error) {
-    console.log(error.message);
-    res.send(`<script>alert('${error.message} ❗');window.location='/';</script>`);
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.send(`<script>alert('${error.message} ❗');window.location='/';</script>`);
+    }
   }
-}
-
-app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
+  const stream = ytdl('https://youtu.be/bL6dJjxm0x0?feature=shared',{filter:"videoandaudio",quality:"highestvideo"}).pipe(
+    fs.createWriteStream(`${"gt"}.mp3`)
+  );
+  
+  app.listen(PORT, () => {
+    console.log(`http://localhost:${PORT}`);
 });
