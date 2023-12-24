@@ -109,7 +109,7 @@ async function fetch(title, artist, cover, music, res) {
       .then((response) => {
         console.log("File updated successfully:", response.data.commit.message);
         res.send(
-          `<script>alert('Music uploaded successfully 🚀');window.location='/';</script>`
+          `<script>alert('Music uploaded successfully 🚀 Take upto 3min to Show');window.location='/';</script>`
         );
       })
       .catch((error) => {
