@@ -153,10 +153,10 @@ async function download(title, artist, url, cover, res) {
           content,
         });
         console.log(file.data.commit.message);
-        fs.unlinkSync(`${info}.mp3`);
+        fs.unlinkSync(`${title}.mp3`);
         fetch(title, artist, cover, `${info}.mp3`, res);
       } catch (error) {
-        fs.unlinkSync(`${info}.mp3`);
+        fs.unlinkSync(`${title}.mp3`);
         console.error(error.message);
         res.send(
           "<script>alert('Music Already Exist 💀');window.location='/';</script>"
