@@ -18,6 +18,9 @@ app.use(express.static("public"));
 const github = new Octokit({
   auth: process.env.GITHUB,
 });
+const github2 = new Octokit({
+  auth: process.env.GITHUB2,
+});
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/Upload.html"));
@@ -35,8 +38,8 @@ app.post("/upload", upload.single("cover"), async (req, res) => {
     try {
       const info = (await ytdl.getInfo(req.body.url)).videoDetails.title;
       try {
-        const file = await github.repos.createOrUpdateFileContents({
-          owner: "babyo7",
+        const file = await github2.repos.createOrUpdateFileContents({
+          owner: "babyo77",
           repo: "Music-Player",
           path: `Cover/${req.file.originalname}`,
           message: "New Cover",
@@ -90,7 +93,7 @@ async function fetch(title, artist, cover, music, res) {
     title: title,
     artist: artist,
     audio: `https://music-player-babyo7.vercel.app/Music/${music}`,
-    cover: `https://music-player-babyo7.vercel.app/Cover/${cover}`,
+    cover: `Cover/${cover}`,
   };
   try {
     github.repos
