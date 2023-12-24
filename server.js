@@ -148,13 +148,13 @@ async function download(title, artist, url, cover, res) {
         const file = await github.repos.createOrUpdateFileContents({
           owner: "babyo7",
           repo: "Music-Player",
-          path: `Music/${info}.mp3`,
+          path: `Music/${title}.mp3`,
           message: "new",
           content,
         });
         console.log(file.data.commit.message);
         fs.unlinkSync(`${title}.mp3`);
-        fetch(title, artist, cover, `${info}.mp3`, res);
+        fetch(title, artist, cover, `${title}.mp3`, res);
       } catch (error) {
         fs.unlinkSync(`${title}.mp3`);
         console.error(error.message);
