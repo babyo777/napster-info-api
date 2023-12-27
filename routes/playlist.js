@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
       );
       res.json(musicList);
     } catch (error) {
-      res.status(404).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     }
   } else {
     res.json({ message: "no url Provided" });
