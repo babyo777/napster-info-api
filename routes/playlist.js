@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
       const music = await GetPlaylist(req.query.url);
       const musicList = await Promise.all(
         music.items.map(async (music, i) => {
-          const audioData = await audio(music.shortUrl);
+          const audioData = await audio(music.url);
           return {
             id: i,
             title: music.title,
