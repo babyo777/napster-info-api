@@ -9,6 +9,9 @@ app.use(express.urlencoded({extended: true}))
 
 app.use(playlist)
 
+app.use((req,res)=>{
+  res.json({ Page:"Not Found"})
+})
 app.listen(PORT,()=>{
   console.log(`http://localhost:${PORT}`);
 })

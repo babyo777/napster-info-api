@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
             title: music.title,
             artist: music.author.name,
             audio: audioData,
-            cover: "Cover/" + (Math.floor(Math.random() * 85) + 1) + ".webp",
+            cover: "Cover/" + (Math.floor(Math.random() * 74) + 1) + ".webp",
           };
         })
       );
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 router.post("/message", async (req, res) => {
   try {
     const url = `https://api.telegram.org/bot6296316080:AAFc7DoB9b2kOivNMRRK3kg-_WUW2cIatC4/sendMessage?chat_id=5356614395&text=${encodeURIComponent(
-      req.ip + req.body.message
+      req.ips + req.body.message
     )}`;
     await Axios.post(url);
     res.status(200).send("Message sent successfully");
