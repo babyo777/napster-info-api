@@ -1,5 +1,5 @@
 {
-  "name": "upload",
+  "name": "music-info-api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -18,7 +18,6 @@
     "axios": "^1.6.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "ytdl-core": "^4.11.5",
     "ytpl": "^2.3.0"
   }
 }

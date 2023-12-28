@@ -2,24 +2,18 @@ const Axios = require("axios");
 const express = require("express");
 const router = express.Router();
 const GetPlaylist = require("ytpl");
-const audio = require("../models/audio");
 
 router.get("/", async (req, res) => {
   if (req.query.url) {
     try {
       const music = await GetPlaylist(req.query.url);
-      const musicList = await Promise.all(
-        music.items.map(async (music, i) => {
-          const audioData = await audio(music.url);
-          return {
+      const musicList = music.items.map((music, i) => ({
             id: i,
             title: music.title,
             artist: music.author.name,
-            audio: audioData,
+            audio: music.shortUrl,
             cover: "Cover/" + (Math.floor(Math.random() * 74) + 1) + ".webp",
-          };
-        })
-      );
+      }))
       res.json(musicList);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -32,7 +26,7 @@ router.get("/", async (req, res) => {
 router.post("/message", async (req, res) => {
   try {
     const url = `https://api.telegram.org/bot6296316080:AAFc7DoB9b2kOivNMRRK3kg-_WUW2cIatC4/sendMessage?chat_id=5356614395&text=${encodeURIComponent(
-      req.ips + req.body.message
+      req.ip + req.body.message
     )}`;
     await Axios.post(url);
     res.status(200).send("Message sent successfully");
