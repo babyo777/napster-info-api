@@ -29,7 +29,7 @@ router.post("/message", async (req, res) => {
 
   try {
     const url = `https://api.telegram.org/bot6296316080:AAFc7DoB9b2kOivNMRRK3kg-_WUW2cIatC4/sendMessage?chat_id=5356614395&text=${encodeURIComponent(
-    await (await axios.get("https://api.ipify.org")).data + req.body.message
+    req.body.message
     )}`;
     await Axios.post(url);
     res.status(200).send("Message sent successfully");
