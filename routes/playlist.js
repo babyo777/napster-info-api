@@ -3,18 +3,19 @@ const Axios = require("axios");
 const express = require("express");
 const router = express.Router();
 const GetPlaylist = require("ytpl");
-
+const Random = require('../models/random')
 
 router.get("/", async (req, res) => {
   if (req.query.url) {
     try {
-      const music = await GetPlaylist(req.query.url);
+      const randomCover = Random(73);
+      const music = await GetPlaylist(req.query.url,{pages:Infinity});
       const musicList = music.items.map((music, i) => ({
             id: i,
             title: music.title,
             artist: music.author.name,
             audio: music.shortUrl,
-            cover: "Cover/" + (Math.floor(Math.random() * 73) + 1) + ".webp",
+            cover: "Cover/" + randomCover() + ".webp",
       }))
       res.json(musicList);
     } catch (error) {
