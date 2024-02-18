@@ -1,20 +1,28 @@
-const Axios = require("axios");
 const express = require("express");
 const router = express.Router();
 const GetPlaylist = require("ytpl");
 const Random = require("../models/random");
 const Search = require("../models/search");
 
+const de = {
+  id: 0,
+  title: "The Chainsmokers - Closer (Lyrics) ft. Halsey",
+  artist: "7clouds",
+  audio: "https://www.youtube.com/watch?v=25ROFXjoaAU",
+  cover:
+    "https://i.ytimg.com/vi/25ROFXjoaAU/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAhp5QxOR_Z3E8qsA2CaOaPOQmGng",
+};
+
 router.get("/", async (req, res) => {
   if (req.query.url) {
     try {
       const randomCover = Random(73);
       const music = await GetPlaylist(req.query.url, { pages: Infinity });
-      const musicList = music.items.map((music, i) => ({
+      const musicList = music.items.map((m, i) => ({
         id: i,
-        title: music.title,
-        artist: music.author.name,
-        audio: music.shortUrl,
+        title: m.title,
+        artist: m.author.name,
+        audio: m.shortUrl,
         cover:
           "https://your-napster.vercel.app" +
           "/Cover/" +
@@ -35,19 +43,19 @@ router.get("/:s?", async (req, res) => {
     const query = req.params.s;
     res.json(await Search(query));
   } catch (error) {
+    if (error.message == "Cannot read properties of null (reading 'split')") {
+      res.status(200).json([de]);
+      return;
+    }
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post("/message", async (req, res) => {
+router.get("/is/p/:l?", async (req, res) => {
   try {
-    const url = `https://api.telegram.org/bot6296316080:AAFc7DoB9b2kOivNMRRK3kg-_WUW2cIatC4/sendMessage?chat_id=5356614395&text=${encodeURIComponent(
-      req.body.message
-    )}`;
-    await Axios.post(url);
-    res.status(200).send("Message sent successfully");
+    const p = await GetPlaylist.getPlaylistID(req.query.l);
+    res.status(200).json(p);
   } catch (error) {
-    console.log(error.message);
     res.status(500).send("Error Sending Message");
   }
 });
