@@ -1,9 +1,8 @@
-import { searchArtists, getArtist } from "node-youtube-music";
+import { getArtist } from "node-youtube-music";
 
 async function getArtistsDetails(query) {
-  const a = await searchArtists(query);
-  const ga = await getArtist(a[0].artistId);
-  return ga;
+  const a = await getArtist(query);
+  return a;
 }
 
 export { getArtistsDetails };
