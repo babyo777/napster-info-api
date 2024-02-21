@@ -1,19 +1,19 @@
-const express = require('express')
-const app =  express()
-const playlist = require('./routes/playlist')
-const cors = require('cors')
-const PORT = process.env.PORT || 3000
+import express from "express";
+import playlist from "./routes/playlist.js";
+import cors from "cors";
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(cors())
-app.use(express.urlencoded({extended: true}))
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(playlist)
+app.use(playlist);
 
-app.use((req,res)=>{
-  res.json({ Page:"Not Found"})
-})
-app.listen(PORT,()=>{
+app.use((req, res) => {
+  res.json({ Page: "Not Found" });
+});
+app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
-})
+});
 
-module.exports = app
+export { app };

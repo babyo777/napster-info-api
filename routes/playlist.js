@@ -1,63 +1,101 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const GetPlaylist = require("ytpl");
-const Random = require("../models/random");
-const Search = require("../models/search");
+import getPlaylistID from "ytpl";
+import { searchWithSuggestion } from "../models/Suggestions/searchMuisc.js";
+import { searchWithoutSuggestion } from "../models/searchMusic.js";
+import { searchPlaylist } from "../models/searchPlaylist.js";
+import { searchArtist } from "../models/searchArtist.js";
+import { getArtistsDetails } from "../models/getArtist.js";
+import { getAlbumSongs } from "../models/getalbumSongs.js";
+import { getPlaylistSongs } from "../models/getplaylistSongs.js";
+import { searchAlbum } from "../models/searchAlbum.js";
+import { searchPlaylists } from "node-youtube-music";
 
-const de = {
-  id: 0,
-  title: "The Chainsmokers - Closer (Lyrics) ft. Halsey",
-  artist: "7clouds",
-  audio: "https://www.youtube.com/watch?v=25ROFXjoaAU",
-  cover:
-    "https://i.ytimg.com/vi/25ROFXjoaAU/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAhp5QxOR_Z3E8qsA2CaOaPOQmGng",
-};
-
-router.get("/", async (req, res) => {
-  if (req.query.url) {
-    try {
-      const randomCover = Random(73);
-      const music = await GetPlaylist(req.query.url, { pages: Infinity });
-      const musicList = music.items.map((m, i) => ({
-        id: i,
-        title: m.title,
-        artist: m.author.name,
-        audio: m.shortUrl,
-        cover:
-          "https://your-napster.vercel.app" +
-          "/Cover/" +
-          randomCover() +
-          ".webp",
-      }));
-      res.json(musicList);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  } else {
-    res.json({ message: "no url Provided" });
+router.get("/ss/:s?", async (req, res) => {
+  try {
+    const query = req.params.s;
+    res.json(await searchWithSuggestion(query));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
-router.get("/:s?", async (req, res) => {
+router.get("/s/:s?", async (req, res) => {
   try {
     const query = req.params.s;
-    res.json(await Search(query));
+    res.json(await searchWithoutSuggestion(query));
   } catch (error) {
-    if (error.message == "Cannot read properties of null (reading 'split')") {
-      res.status(200).json([de]);
-      return;
-    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/ps/:ps?", async (req, res) => {
+  try {
+    const query = req.params.ps;
+    res.json(await getPlaylistSongs(query));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.get("/p/:p?", async (req, res) => {
+  try {
+    const query = req.params.p;
+    res.json(await searchPlaylist(query));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.get("/a/:a?", async (req, res) => {
+  try {
+    //do h-2,160 w-3,840
+    const query = req.params.a;
+    res.json(await searchArtist(query));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/ga/:ga?", async (req, res) => {
+  try {
+    //do h-2,160 w-3,840
+    const query = req.params.ga;
+    res.json(await getArtistsDetails(query));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/gas/:gas?", async (req, res) => {
+  try {
+    //do h-2,160 w-3,840
+    const query = req.params.gas;
+    res.json(await getAlbumSongs(query));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.get("/al/:al?", async (req, res) => {
+  try {
+    //do h-2,160 w-3,840
+    const query = req.params.al;
+    res.json(await searchAlbum(query));
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
 router.get("/is/p/:l?", async (req, res) => {
   try {
-    const p = await GetPlaylist.getPlaylistID(req.query.l);
-    res.status(200).json(p);
+    const is = req.query.l;
+    const id = await getPlaylistID.getPlaylistID(is);
+    const p = getPlaylistSongs(id);
+    if (p.length == 0) {
+      return res.status(404).json("invalid");
+    }
+    res.status(200).json(id);
   } catch (error) {
-    res.status(500).send("Error Sending Message");
+    res.status(404).json(error.message);
   }
 });
 
-module.exports = router;
+export default router;

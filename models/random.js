@@ -12,4 +12,4 @@ function getRandomNumberGenerator(totalCovers) {
   };
 }
 
-module.exports = getRandomNumberGenerator;
+export default getRandomNumberGenerator;
