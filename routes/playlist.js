@@ -88,7 +88,7 @@ router.get("/is/p/:l?", async (req, res) => {
   try {
     const is = req.query.l;
     const id = await getPlaylistID.getPlaylistID(is);
-    const p = getPlaylistSongs(id);
+    const p = await getPlaylistSongs(id);
     if (p.length == 0) {
        res.status(500).json("invalid");
     }else{
