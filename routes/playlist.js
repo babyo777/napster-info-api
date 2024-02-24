@@ -90,7 +90,7 @@ router.get("/is/p/:l?", async (req, res) => {
     const id = await getPlaylistID.getPlaylistID(is);
     const p = getPlaylistSongs(id);
     if (p.length == 0) {
-      return res.status(500).json("invalid");
+       res.status(500).json("invalid");
     }else{
     res.status(200).json(id);}
   } catch (error) {
