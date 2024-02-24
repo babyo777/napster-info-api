@@ -91,8 +91,8 @@ router.get("/is/p/:l?", async (req, res) => {
     const p = getPlaylistSongs(id);
     if (p.length == 0) {
       return res.status(500).json("invalid");
-    }
-    res.status(200).json(id);
+    }else{
+    res.status(200).json(id);}
   } catch (error) {
     res.status(500).json(error.message);
   }
