@@ -9,7 +9,7 @@ import { getArtistsDetails } from "../models/getArtist.js";
 import { getAlbumSongs } from "../models/getalbumSongs.js";
 import { getPlaylistSongs } from "../models/getplaylistSongs.js";
 import { searchAlbum } from "../models/searchAlbum.js";
-import { searchPlaylists } from "node-youtube-music";
+import { listMusicsFromPlaylist, searchPlaylists } from "node-youtube-music";
 
 router.get("/ss/:s?", async (req, res) => {
   try {
@@ -84,15 +84,24 @@ router.get("/al/:al?", async (req, res) => {
   }
 });
 
+router.get("/test/:l", async (req, res) => {
+  try {
+    const ps = await listMusicsFromPlaylist(req.params.l);
+    res.json(ps);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
 router.get("/is/p/:l?", async (req, res) => {
   try {
     const is = req.query.l;
     const id = await getPlaylistID.getPlaylistID(is);
     const p = await getPlaylistSongs(id);
     if (p.length == 0) {
-       res.status(500).json("invalid");
-    }else{
-    res.status(200).json(id);}
+      res.status(500).json("invalid");
+    } else {
+      res.status(200).json(id);
+    }
   } catch (error) {
     res.status(500).json(error.message);
   }
