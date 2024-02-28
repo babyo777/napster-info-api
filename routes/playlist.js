@@ -11,6 +11,7 @@ import { getPlaylistSongs } from "../models/getplaylistSongs.js";
 import { searchAlbum } from "../models/searchAlbum.js";
 import { SpotifyToYT } from "../models/SpotifyToYt.js";
 import { getPlaylistDetails } from "../models/getPlaylistDetails.js";
+import { GetPlaylistSongsLessThenHundred } from "../models/getPlaylistDetailsLessthanHundred.js";
 
 router.get("/ss/:s?", async (req, res) => {
   try {
@@ -47,8 +48,16 @@ router.get("/ps/:ps?", async (req, res) => {
 router.get("/gpd/:ps?", async (req, res) => {
   try {
     const query = req.params.ps;
-    console.log(await getPlaylistDetails(query));
     res.json(await getPlaylistDetails(query));
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+router.get("/psh/:ps?", async (req, res) => {
+  try {
+    const query = req.params.ps;
+    res.json(await GetPlaylistSongsLessThenHundred(query));
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
