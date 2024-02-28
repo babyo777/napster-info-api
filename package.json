@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "node-youtube-music": "^0.10.3",
+    "spotify-web-api-node": "^5.0.2",
     "ytpl": "^2.3.0"
   }
 }

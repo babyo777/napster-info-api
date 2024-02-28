@@ -9,7 +9,8 @@ import { getArtistsDetails } from "../models/getArtist.js";
 import { getAlbumSongs } from "../models/getalbumSongs.js";
 import { getPlaylistSongs } from "../models/getplaylistSongs.js";
 import { searchAlbum } from "../models/searchAlbum.js";
-import { listMusicsFromPlaylist, searchPlaylists } from "node-youtube-music";
+import { SpotifyToYT } from "../models/SpotifyToYt.js";
+import { getPlaylistDetails } from "../models/getPlaylistDetails.js";
 
 router.get("/ss/:s?", async (req, res) => {
   try {
@@ -32,8 +33,24 @@ router.get("/s/:s?", async (req, res) => {
 router.get("/ps/:ps?", async (req, res) => {
   try {
     const query = req.params.ps;
-    res.json(await getPlaylistSongs(query));
+    const songs = await getPlaylistSongs(query);
+    if (songs.length > 0) {
+      res.json(songs);
+    } else {
+      res.status(500).json({ message: "mixes not supported" });
+    }
   } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+router.get("/gpd/:ps?", async (req, res) => {
+  try {
+    const query = req.params.ps;
+    console.log(await getPlaylistDetails(query));
+    res.json(await getPlaylistDetails(query));
+  } catch (error) {
+    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 });
@@ -84,12 +101,12 @@ router.get("/al/:al?", async (req, res) => {
   }
 });
 
-router.get("/test/:l", async (req, res) => {
+router.get("/spyt/:l", async (req, res) => {
+  const PlaylistID = req.params.l;
   try {
-    const ps = await listMusicsFromPlaylist(req.params.l);
-    res.json(ps);
+    res.json(await SpotifyToYT(PlaylistID));
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(500).json({ message: error.message });
   }
 });
 router.get("/is/p/:l?", async (req, res) => {
