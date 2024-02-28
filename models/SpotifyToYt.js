@@ -10,11 +10,12 @@ const SpotifyToYT = async (PlaylistID) => {
   Spotify.setAccessToken(token.body["access_token"]);
 
   const playlistTracks = await Spotify.getPlaylistTracks(PlaylistID);
-  console.log(playlistTracks.body);
+
   const modified = playlistTracks.body["items"].map((track) => {
     const name = track.track.name;
+    const thumbnailUrl = track.track.album.images[0].url;
     const artist = track.track.artists[0].name;
-    return { name, artist };
+    return { name, artist, thumbnailUrl };
   });
   return modified;
 };
