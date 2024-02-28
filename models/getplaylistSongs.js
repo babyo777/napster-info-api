@@ -1,15 +1,17 @@
-import { listMusicsFromPlaylist } from "node-youtube-music";
-
+// import { listMusicsFromPlaylist } from "node-youtube-music";
+import ytpl from "ytpl";
 async function getPlaylistSongs(query) {
-  const ps = await listMusicsFromPlaylist(query);
-  const modified = ps.map((m) => {
-    const parts = m.thumbnailUrl.split("/");
-    const videoID = parts[parts.length - 2];
+  // const ps = await listMusicsFromPlaylist(query, { pages: Infinity });
+  const t = await ytpl(query, { pages: Infinity });
+  const modified = t.items.map((m) => {
     return {
-      youtubeId: m.youtubeId || videoID,
+      youtubeId: m.id,
       title: m.title,
-      artists: m.artists,
-      thumbnailUrl: m.thumbnailUrl,
+      artists: {
+        id: m.author.channelID,
+        name: m.author.name,
+      },
+      thumbnailUrl: m.bestThumbnail.url,
     };
   });
   return modified;
