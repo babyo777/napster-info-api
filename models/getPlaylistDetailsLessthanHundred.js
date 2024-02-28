@@ -11,7 +11,6 @@ async function GetPlaylistSongsLessThenHundred(query) {
       thumbnailUrl: s.thumbnailUrl,
     };
   });
-  console.log(modified);
   return modified;
 }
 
