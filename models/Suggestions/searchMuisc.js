@@ -1,4 +1,4 @@
-import { searchMusics, getSuggestions } from "node-youtube-music";
+import { getSuggestions } from "node-youtube-music";
 
 async function searchWithSuggestion(query) {
   const sq = await getSuggestions(query);
