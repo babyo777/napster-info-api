@@ -13,6 +13,7 @@ import { SpotifyToYT } from "../models/SpotifyToYt.js";
 import { getPlaylistDetails } from "../models/getPlaylistDetails.js";
 import { GetPlaylistSongsLessThenHundred } from "../models/getPlaylistDetailsLessthanHundred.js";
 import { getLyrics } from "../models/getLyrics.js";
+import { getLRC } from "../models/getLrc.js";
 
 router.get("/ss/:s?", async (req, res) => {
   try {
@@ -124,6 +125,15 @@ router.get("/lyrics/", async (req, res) => {
   const artist = req.query.a;
   try {
     res.json(await getLyrics(title, artist));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.get("/lrc/", async (req, res) => {
+  const title = req.query.t;
+  const artist = req.query.a;
+  try {
+    res.json(await getLRC(`${title} ${artist}`));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
