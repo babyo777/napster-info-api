@@ -129,11 +129,10 @@ router.get("/lyrics/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-router.get("/lrc/", async (req, res) => {
-  const title = req.query.t;
-  const artist = req.query.a;
+router.get("/lrc/:p?", async (req, res) => {
+  const title = req.params.p;
   try {
-    res.json(await getLRC(`${title} ${artist}`));
+    res.json(await getLRC(title));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
