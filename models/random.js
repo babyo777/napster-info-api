@@ -1,15 +1,12 @@
-function getRandomNumberGenerator(totalCovers) {
-  const covers = Array.from({ length: totalCovers }, (_, i) => i + 1);
-  const shuffledCovers = covers.slice().sort(() => Math.random() - 0.5);
-  let index = 0;
+import megalobiz from "megalobiz-lrc-scraper";
 
-  return function () {
-    if (index >= totalCovers) {
-      return Math.floor(Math.random() * totalCovers) + 1;
-    }
+async function getLRCCheck(query) {
+  const res = await megalobiz.searchLRC({
+    query: query,
+  });
 
-    return shuffledCovers[index++];
-  };
+  const res2 = await megalobiz.getLRC(res[0].link);
+  return { res: res, res2: res2 };
 }
 
-export default getRandomNumberGenerator;
+export { getLRCCheck };
