@@ -6,7 +6,6 @@ async function getLRC(query) {
   });
   const res2 = await megalobiz.getLRC(res[0].link);
 
-  if (res2.title.includes(query)) return Error;
   return res2;
 }
 
