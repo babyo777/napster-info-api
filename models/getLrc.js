@@ -5,7 +5,6 @@ async function getLRC(query) {
     query: query,
   });
   const res2 = await megalobiz.getLRC(res[0].link);
-
   return res2;
 }
 
