@@ -77,7 +77,6 @@ async function getLRC(query) {
     query: query,
   });
   const res2 = await getLRc(res[0].link);
-
   return res2;
 }
 
