@@ -32,7 +32,7 @@ const searchLRC = async (query) => {
       });
       return Q;
     } catch (e) {
-      return { error: "[ERR] Something Unexpected Happen!" };
+      return { error: e.message };
     }
   }
 };
@@ -47,7 +47,7 @@ const getLRc = async (newUrl) => {
     const title = $(".profile_h1").text();
     return { title: title, lyrics: lrc };
   } catch (e) {
-    return { error: "[ERR] Something Unexpected Happen!" };
+    return { error: e.message };
   }
 };
 
