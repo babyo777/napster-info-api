@@ -25,11 +25,6 @@ const searchLRC = async (query) => {
         let E = {};
         E.title = $(el).children("a").attr("name");
         E.link = `https://www.megalobiz.com${$(el).children("a").attr("href")}`;
-        /*
-                //total time obj. is currently available
-                i = $(el).children("a").attr("title").split(" ")
-                E.totalTime = i[i.length-1]
-                */
         Q.push(E);
       });
       return Q;
