@@ -33,7 +33,9 @@ const searchLRC = async (query) => {
         "X-Asbd-Id": "129477",
         "X-Fb-Lsd": "hEgDwwJ3jQ2h1Ha--PWC7t",
       };
-      const { data } = await axios.get(url, headers);
+      const { data } = await axios.get(url, {
+        headers: headers,
+      });
       const $ = cheerio.load(data);
       const listItems = $(
         ".entity_full_member_info .entity_full_member_name div[class='pro_part mid']"
