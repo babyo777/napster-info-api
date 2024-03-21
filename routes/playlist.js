@@ -14,7 +14,6 @@ import { getPlaylistDetails } from "../models/getPlaylistDetails.js";
 import { GetPlaylistSongsLessThenHundred } from "../models/getPlaylistDetailsLessthanHundred.js";
 import { getLyrics } from "../models/getLyrics.js";
 import { getLRC } from "../models/getLrc.js";
-import { getLRCCheck } from "../models/random.js";
 
 router.get("/ss/:s?", async (req, res) => {
   try {
@@ -130,14 +129,7 @@ router.get("/lyrics/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-router.get("/check/:p?", async (req, res) => {
-  const title = req.params.p;
-  try {
-    res.json(await getLRCCheck(title));
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+
 router.get("/lrc/:p?", async (req, res) => {
   const title = req.params.p;
   try {
