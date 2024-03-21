@@ -35,25 +35,25 @@ const searchLRC = async (query) => {
   }
 };
 
-const getLRc = async (newUrl) => {
-  try {
-    let { data } = await axios.get(newUrl);
-    const $ = cheerio.load(data);
-    const lrc = $("[class='lyrics_details entity_more_info']")
-      .children("span")
-      .text();
-    const title = $(".profile_h1").text();
-    return { title: title, lyrics: lrc };
-  } catch (e) {
-    return { error: e.message };
-  }
-};
+// const getLRc = async (newUrl) => {
+//   try {
+//     let { data } = await axios.get(newUrl);
+//     const $ = cheerio.load(data);
+//     const lrc = $("[class='lyrics_details entity_more_info']")
+//       .children("span")
+//       .text();
+//     const title = $(".profile_h1").text();
+//     return { title: title, lyrics: lrc };
+//   } catch (e) {
+//     return { error: e.message };
+//   }
+// };
 
 async function getLRC(query) {
   const res = await searchLRC({
     query: query,
   });
-  const res2 = await getLRc(res[0].link);
+  // const res2 = await getLRc(res[0].link);
 
   return res;
 }
