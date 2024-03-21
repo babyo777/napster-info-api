@@ -1,4 +1,5 @@
-import puppeteer from "puppeteer";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 const searchLRC = async (query) => {
   if (
@@ -11,24 +12,23 @@ const searchLRC = async (query) => {
     const q = query.query.replace(/ /gi, "+");
     const url = `https://www.megalobiz.com/search/all?qry=${q}`;
     try {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto(url);
-      const listItems = await page.$$eval(
-        ".entity_full_member_info .entity_full_member_name div[class='pro_part mid']",
-        (items) => {
-          return items.map((el) => {
-            return {
-              title: el.querySelector("a").getAttribute("name"),
-              link: `https://www.megalobiz.com${el
-                .querySelector("a")
-                .getAttribute("href")}`,
-            };
-          });
-        }
+      const res = await axios.get(url + "&searchButton.x=16&searchButton.y=8", {
+        responseType: "text",
+      });
+      return res.data;
+      const $ = cheerio.load(data);
+      const listItems = $(
+        ".entity_full_member_info .entity_full_member_name div[class='pro_part mid']"
       );
-      await browser.close();
-      return listItems.slice(0, 1);
+      let Q = [];
+      listItems.each((idx, el) => {
+        if (Q.length == 1) return;
+        let E = {};
+        E.title = $(el).children("a").attr("name");
+        E.link = `https://www.megalobiz.com${$(el).children("a").attr("href")}`;
+        Q.push(E);
+      });
+      return Q;
     } catch (e) {
       return { error: e.message };
     }
@@ -37,16 +37,13 @@ const searchLRC = async (query) => {
 
 const getLRc = async (newUrl) => {
   try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(newUrl);
-    const title = await page.$eval(".profile_h1", (el) => el.textContent);
-    const lrc = await page.$eval(
-      ".lyrics_details.entity_more_info > span",
-      (el) => el.textContent
-    );
-    await browser.close();
-    return { title: title.trim(), lyrics: lrc.trim() };
+    let { data } = await axios.get(newUrl);
+    const $ = cheerio.load(data);
+    const lrc = $("[class='lyrics_details entity_more_info']")
+      .children("span")
+      .text();
+    const title = $(".profile_h1").text();
+    return { title: title, lyrics: lrc };
   } catch (e) {
     return { error: e.message };
   }
@@ -58,7 +55,7 @@ async function getLRC(query) {
   });
   const res2 = await getLRc(res[0].link);
 
-  return res2;
+  return res;
 }
 
 export { getLRC };
