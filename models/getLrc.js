@@ -1,5 +1,4 @@
-import axios from "axios";
-import * as cheerio from "cheerio";
+import puppeteer from "puppeteer";
 
 const searchLRC = async (query) => {
   if (
@@ -12,42 +11,44 @@ const searchLRC = async (query) => {
     const q = query.query.replace(/ /gi, "+");
     const url = `https://www.megalobiz.com/search/all?qry=${q}`;
     try {
-      const { data } = await axios.get(url);
-      const $ = cheerio.load(data);
-      const listItems = $(
-        ".entity_full_member_info .entity_full_member_name div[class='pro_part mid']"
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.goto(url);
+      const listItems = await page.$$eval(
+        ".entity_full_member_info .entity_full_member_name div[class='pro_part mid']",
+        (items) => {
+          return items.map((el) => {
+            return {
+              title: el.querySelector("a").getAttribute("name"),
+              link: `https://www.megalobiz.com${el
+                .querySelector("a")
+                .getAttribute("href")}`,
+            };
+          });
+        }
       );
-      let Q = [];
-      listItems.each((idx, el) => {
-        if (Q.length == 1) return;
-        let E = {};
-        E.title = $(el).children("a").attr("name");
-        E.link = `https://www.megalobiz.com${$(el).children("a").attr("href")}`;
-        /*
-                //total time obj. is currently available
-                i = $(el).children("a").attr("title").split(" ")
-                E.totalTime = i[i.length-1]
-                */
-        Q.push(E);
-      });
-      return Q;
+      await browser.close();
+      return listItems.slice(0, 1);
     } catch (e) {
-      return { error: "[ERR] Something Unexpected Happen!" };
+      return { error: e.message };
     }
   }
 };
 
 const getLRc = async (newUrl) => {
   try {
-    let { data } = await axios.get(newUrl);
-    const $ = cheerio.load(data);
-    const lrc = $("[class='lyrics_details entity_more_info']")
-      .children("span")
-      .text();
-    const title = $(".profile_h1").text();
-    return { title: title, lyrics: lrc };
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(newUrl);
+    const title = await page.$eval(".profile_h1", (el) => el.textContent);
+    const lrc = await page.$eval(
+      ".lyrics_details.entity_more_info > span",
+      (el) => el.textContent
+    );
+    await browser.close();
+    return { title: title.trim(), lyrics: lrc.trim() };
   } catch (e) {
-    return { error: "[ERR] Something Unexpected Happen!" };
+    return { error: e.message };
   }
 };
 
