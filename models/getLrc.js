@@ -12,9 +12,10 @@ const searchLRC = async (query) => {
     const q = query.query.replace(/ /gi, "+");
     const url = `https://www.megalobiz.com/search/all?qry=${q}`;
     try {
-      const { data } = await axios.get(
-        url + "&searchButton.x=16&searchButton.y=8"
-      );
+      const res = await axios.get(url + "&searchButton.x=16&searchButton.y=8", {
+        responseType: "text",
+      });
+      return res.data;
       const $ = cheerio.load(data);
       const listItems = $(
         ".entity_full_member_info .entity_full_member_name div[class='pro_part mid']"
@@ -54,7 +55,7 @@ async function getLRC(query) {
   });
   const res2 = await getLRc(res[0].link);
 
-  return res2;
+  return res;
 }
 
 export { getLRC };
